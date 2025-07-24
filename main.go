@@ -4,12 +4,16 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"runtime/pprof"
 
 	"github.com/booth-w/chess-analysis/pkg/parser"
 )
 
 func main() {
 	s := bufio.NewScanner(os.Stdin)
+	profFile, _ := os.Create("cpu.prof")
+	pprof.StartCPUProfile(profFile)
+	defer pprof.StopCPUProfile()
 
 	total := 0
 	wins := [3]int{}
