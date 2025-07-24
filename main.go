@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/booth-w/chess-analysis/pkg/parser"
 )
 
 func main() {
@@ -14,16 +16,11 @@ func main() {
 	for s.Scan() {
 		line := s.Text()
 
-		if len(line) >= 2 && line[1] == 'R' {
+		winner := parser.GetWinner(line)
+		if (winner != -1) {
 			total++
-			if line[10] == '/' {
-				wins[2]++
-			} else if line[9] == '1' {
-				wins[0]++
-			} else {
-				wins[1]++
-			}
+			wins[winner]++
 		}
 	}
-	fmt.Printf("White: %d, Black: %d, Draw: %d, Total: %d\n", wins[0], wins[1], wins[2], total)
+	fmt.Printf("White: %d\nBlack: %d\nDraw:  %d\nTotal: %d\n", wins[0], wins[1], wins[2], total)
 }
