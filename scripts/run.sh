@@ -3,7 +3,7 @@
 
 if [[ "$1" == "test" ]]; then
 	shift
-	zstdcat dataset/lichess_db_standard_rated_2013* | bin/chess-anal $@
+	zstdcat dataset/lichess_db_standard_rated_2013* | go run main.go $@
 else
-	zstdcat dataset/* | bin/chess-anal $@
+	zstdcat dataset/* | go run main.go $@
 fi

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"runtime/pprof"
@@ -10,10 +11,18 @@ import (
 )
 
 func main() {
+	flagProfile := flag.Bool("profile", false, "Enable CPU profiling (creates cpu.prof)")
+	flag.Parse()
+
+	fmt.Println(*flagProfile)
+
+	if *flagProfile {
+		profFile, _ := os.Create("cpu.prof")
+		pprof.StartCPUProfile(profFile)
+		defer pprof.StopCPUProfile()
+	}
+
 	s := bufio.NewScanner(os.Stdin)
-	profFile, _ := os.Create("cpu.prof")
-	pprof.StartCPUProfile(profFile)
-	defer pprof.StopCPUProfile()
 
 	total := 0
 	wins := [3]int{}
