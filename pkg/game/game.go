@@ -25,6 +25,7 @@ type Game struct {
 	Opening     string
 	TimeControl string
 	Termination string
+	LichessId   string
 }
 
 type Games []Game

@@ -12,7 +12,7 @@ import (
 
 type GamesData struct {
 	TotalGames int
-	Wins [3]int
+	Wins       [3]int
 }
 
 func ParseStdin() GamesData {
@@ -68,6 +68,8 @@ func ParseStdin() GamesData {
 					newGame.TimeControl = parseGeneric(line)
 				case "Termination":
 					newGame.Termination = parseGeneric(line)
+				case "LichessId":
+					newGame.LichessId = parseGeneric(line)
 				default:
 					slog.Warn("Unknown metadata key", "metadataKey", metadataKey)
 				}
