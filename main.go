@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
+	"log/slog"
 	"os"
 	"runtime/pprof"
 
@@ -20,32 +20,14 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	s := bufio.NewScanner(os.Stdin)
+	games := parser.ParseStdin()
 
-	game := [2][]string{}
-	totalGames := 0
+	slog.Info("Getting total wins per colour")
+	totalGames := len(games)
 	wins := [3]int{}
 
-	// itterate over each line
-	for s.Scan() {
-		line := s.Text()
-		if len(line) != 0 {
-			if line[0] == '[' {
-				game[0] = append(game[0], line)
-			} else {
-				game[1] = append(game[1], line)
-			}
-			continue
-		} else if len(game[1]) == 0 {
-			continue
-		}
-
-		winner := parser.GetWinner(game[0])
-		if winner != -1 {
-			totalGames++
-			wins[winner]++
-		}
-		game = [2][]string{}
+	for _, g := range games {
+		wins[parser.GetWinner(g.Result)]++
 	}
 
 	whitePercent := float64(wins[0]) / float64(totalGames) * 100
@@ -59,4 +41,6 @@ func main() {
 		wins[2], drawPercent,
 		totalGames,
 	)
+
+	slog.Info("Done")
 }
