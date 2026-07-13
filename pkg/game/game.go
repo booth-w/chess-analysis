@@ -9,7 +9,7 @@ type Game struct {
 	Round  string
 	White  string
 	Black  string
-	Result string
+	Result int
 
 	UTCDate string
 	UTCTime string

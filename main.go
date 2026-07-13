@@ -23,23 +23,17 @@ func main() {
 	games := parser.ParseStdin()
 
 	slog.Info("Getting total wins per colour")
-	totalGames := len(games)
-	wins := [3]int{}
 
-	for _, g := range games {
-		wins[parser.GetWinner(g.Result)]++
-	}
-
-	whitePercent := float64(wins[0]) / float64(totalGames) * 100
-	blackPercent := float64(wins[1]) / float64(totalGames) * 100
-	drawPercent := float64(wins[2]) / float64(totalGames) * 100
+	whitePercent := float64(games.Wins[0]) / float64(games.TotalGames) * 100
+	blackPercent := float64(games.Wins[1]) / float64(games.TotalGames) * 100
+	drawPercent := float64(games.Wins[2]) / float64(games.TotalGames) * 100
 
 	fmt.Printf(
 		"White: %d (%.2f%%)\nBlack: %d (%.2f%%)\nDraw:  %d (%.2f%%)\nTotal: %d\n",
-		wins[0], whitePercent,
-		wins[1], blackPercent,
-		wins[2], drawPercent,
-		totalGames,
+		games.Wins[0], whitePercent,
+		games.Wins[1], blackPercent,
+		games.Wins[2], drawPercent,
+		games.TotalGames,
 	)
 
 	slog.Info("Done")

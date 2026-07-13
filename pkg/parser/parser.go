@@ -10,11 +10,16 @@ import (
 	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
-func ParseStdin() game.Games {
+type GamesData struct {
+	TotalGames int
+	Wins [3]int
+}
+
+func ParseStdin() GamesData {
 	slog.Info("Reading stdin")
 	s := bufio.NewScanner(os.Stdin)
 
-	var games game.Games
+	var gamesData GamesData
 	var newGame game.Game
 
 	for s.Scan() {
@@ -38,7 +43,7 @@ func ParseStdin() game.Games {
 				case "Black":
 					newGame.Black = parseGeneric(line)
 				case "Result":
-					newGame.Result = parseGeneric(line)
+					newGame.Result = getWinner(parseGeneric(line))
 				case "UTCDate":
 					newGame.UTCDate = parseGeneric(line)
 				case "UTCTime":
@@ -74,11 +79,12 @@ func ParseStdin() game.Games {
 			continue
 		}
 
-		games = append(games, newGame)
+		gamesData.TotalGames++
+		gamesData.Wins[newGame.Result]++
 		newGame = game.Game{}
 	}
 
-	return games
+	return gamesData
 }
 
 func parseGeneric(line string) string {

@@ -1,6 +1,6 @@
 package parser
 
-func GetWinner(line string) int {
+func getWinner(line string) int {
 	// Expected inputs:
 	// 1-0
 	// 0-1
