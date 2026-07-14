@@ -15,7 +15,7 @@ type GamesData struct {
 	Wins       [3]int
 }
 
-func ParseStdin() GamesData {
+func ParseStdin(eloMin int, eloMax int) GamesData {
 	slog.Info("Reading stdin")
 	s := bufio.NewScanner(os.Stdin)
 
@@ -43,15 +43,15 @@ func ParseStdin() GamesData {
 				case "Black":
 					newGame.Black = parseGeneric(line)
 				case "Result":
-					newGame.Result = getWinner(parseGeneric(line))
+					newGame.Result = getWinner(line)
 				case "UTCDate":
 					newGame.UTCDate = parseGeneric(line)
 				case "UTCTime":
 					newGame.UTCTime = parseGeneric(line)
 				case "WhiteElo":
-					// newGame.WhiteElo = parseGenericInt(line)
+					newGame.WhiteElo = parseElo(line)
 				case "BlackElo":
-					// newGame.BlackElo = parseGenericInt(line)
+					newGame.BlackElo = parseElo(line)
 				case "WhiteRatingDiff":
 					newGame.WhiteRatingDiff = parseGenericInt(line)
 				case "BlackRatingDiff":
@@ -78,6 +78,12 @@ func ParseStdin() GamesData {
 			}
 			continue
 		} else if len(newGame.Movetext) == 0 {
+			continue
+		}
+
+		// Filter by elo
+		if !FilterElo(newGame, eloMin, eloMax) {
+			newGame = game.Game{}
 			continue
 		}
 

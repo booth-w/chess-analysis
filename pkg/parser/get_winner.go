@@ -5,6 +5,7 @@ func getWinner(line string) int {
 	// 1-0
 	// 0-1
 	// 1/2-1/2
+	line = parseGeneric(line)
 
 	if len(line) == 7 {
 		return 2 // draw

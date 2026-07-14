@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	flagElo := flag.String("elo", "", "Elo rating to filter games by. Usage: <min> or <min>-<max> (inclusive). Example: 1500 or 1500-2000")
 	flagProfile := flag.Bool("profile", false, "Enable CPU profiling (creates cpu.prof)")
 	flag.Parse()
 
@@ -20,7 +21,13 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	games := parser.ParseStdin()
+	eloMin, eloMax, err := parser.ParseEloFilter(*flagElo)
+	if err != nil {
+		slog.Error("Error parsing elo filter", "error", err)
+		os.Exit(1)
+	}
+
+	games := parser.ParseStdin(eloMin, eloMax)
 
 	slog.Info("Getting total wins per colour")
 

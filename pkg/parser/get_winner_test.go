@@ -31,7 +31,7 @@ func TestGetWinner(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			output := getWinner(tt.input)
 			if output != tt.expected {
-				t.Errorf("got %v, expected %v", output, tt.expected)
+				t.Errorf("Expected %v, got %v", tt.expected, output)
 			}
 		})
 	}

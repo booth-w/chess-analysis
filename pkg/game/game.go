@@ -27,5 +27,3 @@ type Game struct {
 	Termination string
 	LichessId   string
 }
-
-type Games []Game
