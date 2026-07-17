@@ -3,6 +3,8 @@ package analyser
 import (
 	"fmt"
 	"log/slog"
+	"os"
+	"text/tabwriter"
 
 	"github.com/booth-w/chess-analysis/pkg/parser"
 )
@@ -10,15 +12,15 @@ import (
 func PrintTotalWinsByColour(gamesData parser.GamesData) {
 	slog.Info("Getting total wins per colour")
 
-	whitePercent := float64(gamesData.Wins[0]) / float64(gamesData.TotalGames) * 100
-	blackPercent := float64(gamesData.Wins[1]) / float64(gamesData.TotalGames) * 100
-	drawPercent := float64(gamesData.Wins[2]) / float64(gamesData.TotalGames) * 100
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+	labels := []string{"White", "Black", "Draw"}
 
-	fmt.Printf(
-		"White: %d (%.2f%%)\nBlack: %d (%.2f%%)\nDraw:  %d (%.2f%%)\nTotal: %d\n",
-		gamesData.Wins[0], whitePercent,
-		gamesData.Wins[1], blackPercent,
-		gamesData.Wins[2], drawPercent,
-		gamesData.TotalGames,
-	)
+	fmt.Fprintln(w, "Colour\tWins\tPercent")
+	for i, wins := range gamesData.Wins {
+		percent := float64(wins) / float64(gamesData.TotalGames) * 100
+		fmt.Fprintf(w, "%s\t%d\t%.2f%%\n", labels[i], wins, percent)
+	}
+
+	w.Flush()
+	fmt.Printf("\nTotal: %d\n", gamesData.TotalGames)
 }
