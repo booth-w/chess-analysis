@@ -29,7 +29,7 @@ func main() {
 
 	games := parser.ParseStdin(eloMin, eloMax)
 
-	analyser.PrintTotalWinsByColour(games)
+	analyser.PrintSortedMap(games.Terminations)
 
 	slog.Info("Done")
 }

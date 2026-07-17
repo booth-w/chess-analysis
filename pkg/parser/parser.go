@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-type GamesData struct {
-	TotalGames int
-	Wins       [3]int
-}
-
 func ParseStdin(eloMin int, eloMax int) GamesData {
 	slog.Info("Reading stdin")
 	s := bufio.NewScanner(os.Stdin)
@@ -84,6 +79,18 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 			newGame = Game{}
 			continue
 		}
+
+		// Time control
+		if gamesData.TimeControls == nil {
+			gamesData.TimeControls = make(map[string]int)
+		}
+		gamesData.TimeControls[newGame.TimeControl]++
+
+		// Termination
+		if gamesData.Terminations == nil {
+			gamesData.Terminations = make(map[string]int)
+		}
+		gamesData.Terminations[newGame.Termination]++
 
 		gamesData.TotalGames++
 		gamesData.Wins[newGame.Result]++
