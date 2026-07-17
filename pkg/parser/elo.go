@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
 func parseElo(line string) int {
@@ -52,7 +50,8 @@ func ParseEloFilter(filter string) (int, int, error) {
 	return -1, -1, formatError
 }
 
-func FilterElo(game game.Game, min int, max int) bool {
+// Returns true if both players of a provided game are within the given elo range (inclusive).
+func FilterElo(game Game, min int, max int) bool {
 	return game.WhiteElo >= min && game.WhiteElo <= max &&
 		game.BlackElo >= min && game.BlackElo <= max
 }

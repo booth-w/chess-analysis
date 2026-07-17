@@ -6,8 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
 type GamesData struct {
@@ -20,7 +18,7 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 	s := bufio.NewScanner(os.Stdin)
 
 	var gamesData GamesData
-	var newGame game.Game
+	var newGame Game
 
 	for s.Scan() {
 		line := s.Text()
@@ -83,13 +81,13 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 
 		// Filter by elo
 		if !FilterElo(newGame, eloMin, eloMax) {
-			newGame = game.Game{}
+			newGame = Game{}
 			continue
 		}
 
 		gamesData.TotalGames++
 		gamesData.Wins[newGame.Result]++
-		newGame = game.Game{}
+		newGame = Game{}
 	}
 
 	return gamesData

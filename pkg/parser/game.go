@@ -1,4 +1,4 @@
-package game
+package parser
 
 type Game struct {
 	Movetext []string
@@ -9,6 +9,8 @@ type Game struct {
 	Round  string
 	White  string
 	Black  string
+
+	// 0: white win, 1: black win, 2: draw
 	Result int
 
 	UTCDate string
