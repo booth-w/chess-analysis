@@ -12,17 +12,17 @@ func TestGetWinner(t *testing.T) {
 	}{
 		{
 			name:     "White wins",
-			input:    "1-0",
+			input:    `[Result "1-0"]`,
 			expected: 0,
 		},
 		{
 			name:     "Black wins",
-			input:    "0-1",
+			input:    `[Result "0-1"]`,
 			expected: 1,
 		},
 		{
 			name:     "Draw",
-			input:    "1/2-1/2",
+			input:    `[Result "1/2-1/2"]`,
 			expected: 2,
 		},
 	}

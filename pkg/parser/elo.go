@@ -2,10 +2,12 @@ package parser
 
 import (
 	"fmt"
+	"log/slog"
 	"strconv"
 	"strings"
 )
 
+// Converts a PGN elo string to an int. Returns -1 if the elo is unknown ("?").
 func parseElo(line string) int {
 	eloStr := parseGeneric(line)
 	if eloStr == "?" {
@@ -14,12 +16,18 @@ func parseElo(line string) int {
 
 	elo, err := strconv.Atoi(eloStr)
 	if err != nil {
+		slog.Error("Failed to parse elo", "elo", eloStr, "error", err)
 		return -1
 	}
 
 	return elo
 }
 
+// Parses a filter string to a min and optional max elo.
+// Examples:
+//	"1500" -> min=1500, max=9999
+//	"1500-2000" -> min=1500, max=2000
+//	"" -> min=0, max=9999
 func ParseEloFilter(filter string) (int, int, error) {
 	if len(filter) == 0 {
 		return 0, 9999, nil

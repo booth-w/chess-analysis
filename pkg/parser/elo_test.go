@@ -4,6 +4,39 @@ import (
 	"testing"
 )
 
+func TestParseElo(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{
+			name:     "Valid Elo",
+			input:    `[WhiteElo "1500"]`,
+			expected: 1500,
+		},
+		{
+			name:     "Unknown Elo",
+			input:    `[WhiteElo "?"]`,
+			expected: -1,
+		},
+		{
+			name:     "Invalid Elo",
+			input:    `[WhiteElo "invalid"]`,
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			output := parseElo(tt.input)
+			if output != tt.expected {
+				t.Errorf("Expected %v, got %v", tt.expected, output)
+			}
+		})
+	}
+}
+
 func TestParseEloFilter(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -56,5 +89,4 @@ func TestParseEloFilter(t *testing.T) {
 			}
 		})
 	}
-
 }

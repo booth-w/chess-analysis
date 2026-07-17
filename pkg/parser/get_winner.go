@@ -1,10 +1,15 @@
 package parser
 
+// Expected inputs:
+//	[Result "1-0"]
+//	[Result "0-1"]
+//	[Result "1/2-1/2"]
+//
+// Returns:
+//	0: white win
+//	1: black win
+//	2: draw
 func getWinner(line string) int {
-	// Expected inputs:
-	// 1-0
-	// 0-1
-	// 1/2-1/2
 	line = parseGeneric(line)
 
 	if len(line) == 7 {
