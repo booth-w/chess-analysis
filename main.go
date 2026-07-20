@@ -29,7 +29,11 @@ func main() {
 
 	games := parser.ParseStdin(eloMin, eloMax)
 
-	analyser.PrintSortedMap(games.Terminations)
+	options := analyser.PrintOptions{
+		PrintTotal: true,
+	}
+	analyser.PrintTotalWinsByColour(games, options)
+	analyser.PrintSortedMap(games.Terminations, options)
 
 	slog.Info("Done")
 }

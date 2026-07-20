@@ -11,8 +11,31 @@ import (
 	"github.com/booth-w/chess-analysis/pkg/parser"
 )
 
-func PrintTotalWinsByColour(gamesData parser.GamesData) {
-	slog.Info("Getting total wins per colour")
+type PrintOptions struct {
+	// If > 0, only print the top N values. Otherwise, print all.
+	Top int
+
+	// If true, any values cut off by [PrintOptions.Top], will be added to "other".
+	Other bool
+
+	// If true, sort ascending.
+	Asc bool
+
+	// If true, print the percentage on the same line.
+	PrintPercent bool
+
+	// If true, print the total at the end.
+	PrintTotal bool
+}
+
+type Number interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
+		~float32 | ~float64
+}
+
+func PrintTotalWinsByColour(gamesData parser.GamesData, options PrintOptions) {
+	slog.Info("Getting total wins per colour", "options", options)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	labels := []string{"White", "Black", "Draw"}
@@ -24,13 +47,17 @@ func PrintTotalWinsByColour(gamesData parser.GamesData) {
 	}
 
 	w.Flush()
-	fmt.Printf("\nTotal: %d\n", gamesData.TotalGames)
+	if options.PrintTotal {
+		fmt.Printf("Total: %d\n", gamesData.TotalGames)
+	}
 }
 
-// Prints a map of string int sorted desc by value.
+var totalValue int64
+
+// Prints a map of orderable interfaces sorted by value.
 // If two values are equal, sort by keys lexicographically.
-func PrintSortedMap[K cmp.Ordered, V cmp.Ordered](m map[K]V) {
-	slog.Info("Printing sorted map")
+func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
+	slog.Info("Printing sorted map", "options", options)
 
 	type kv struct {
 		Key   K
@@ -42,7 +69,16 @@ func PrintSortedMap[K cmp.Ordered, V cmp.Ordered](m map[K]V) {
 		sorted = append(sorted, kv{k, v})
 	}
 
-	// Sort by value descending, then by key ascending
+	if options.PrintTotal {
+		totalValue = 0
+		for _, kv := range sorted {
+			totalValue += int64(kv.Value)
+		}
+	}
+
+	// Sort by value asc/dec, then by key ascending
+	// If sorting gets too slow, only sort the top N values
+	// For now, sort the whole map
 	sort.Slice(sorted, func(i, j int) bool {
 		if sorted[i].Value == sorted[j].Value {
 			return sorted[i].Key < sorted[j].Key
@@ -54,5 +90,9 @@ func PrintSortedMap[K cmp.Ordered, V cmp.Ordered](m map[K]V) {
 	for _, kv := range sorted {
 		fmt.Fprintf(w, "%v\t%v\n", kv.Key, kv.Value)
 	}
+
 	w.Flush()
+	if options.PrintTotal {
+		fmt.Printf("Total: %d\n", totalValue)
+	}
 }
