@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bufio"
+	"fmt"
 	"log/slog"
 	"os"
 	"strconv"
@@ -24,45 +25,45 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 
 				switch metadataKey {
 				case "Event":
-					newGame.Event = parseGeneric(line)
+					newGame.Event, _ = parseGeneric(line)
 				case "Site":
-					newGame.Site = parseGeneric(line)
+					newGame.Site, _ = parseGeneric(line)
 				case "Date":
-					newGame.Date = parseGeneric(line)
+					newGame.Date, _ = parseGeneric(line)
 				case "Round":
-					newGame.Round = parseGeneric(line)
+					newGame.Round, _ = parseGeneric(line)
 				case "White":
-					newGame.White = parseGeneric(line)
+					newGame.White, _ = parseGeneric(line)
 				case "Black":
-					newGame.Black = parseGeneric(line)
+					newGame.Black, _ = parseGeneric(line)
 				case "Result":
-					newGame.Result = getWinner(line)
+					newGame.Result, _ = getWinner(line)
 				case "UTCDate":
-					newGame.UTCDate = parseGeneric(line)
+					newGame.UTCDate, _ = parseGeneric(line)
 				case "UTCTime":
-					newGame.UTCTime = parseGeneric(line)
+					newGame.UTCTime, _ = parseGeneric(line)
 				case "WhiteElo":
-					newGame.WhiteElo = parseElo(line)
+					newGame.WhiteElo, _ = parseElo(line)
 				case "BlackElo":
-					newGame.BlackElo = parseElo(line)
+					newGame.BlackElo, _ = parseElo(line)
 				case "WhiteRatingDiff":
-					newGame.WhiteRatingDiff = parseGenericInt(line)
+					newGame.WhiteRatingDiff, _ = parseGenericInt(line)
 				case "BlackRatingDiff":
-					newGame.BlackRatingDiff = parseGenericInt(line)
+					newGame.BlackRatingDiff, _ = parseGenericInt(line)
 				case "WhiteTitle":
-					newGame.WhiteTitle = parseGeneric(line)
+					newGame.WhiteTitle, _ = parseGeneric(line)
 				case "BlackTitle":
-					newGame.BlackTitle = parseGeneric(line)
+					newGame.BlackTitle, _ = parseGeneric(line)
 				case "ECO":
-					newGame.ECO = parseGeneric(line)
+					newGame.ECO, _ = parseGeneric(line)
 				case "Opening":
-					newGame.Opening = parseGeneric(line)
+					newGame.Opening, _ = parseGeneric(line)
 				case "TimeControl":
-					newGame.TimeControl = parseGeneric(line)
+					newGame.TimeControl, _ = parseGeneric(line)
 				case "Termination":
-					newGame.Termination = parseGeneric(line)
+					newGame.Termination, _ = parseGeneric(line)
 				case "LichessId":
-					newGame.LichessId = parseGeneric(line)
+					newGame.LichessId, _ = parseGeneric(line)
 				default:
 					slog.Warn("Unknown metadata key", "metadataKey", metadataKey)
 				}
@@ -100,15 +101,28 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 	return gamesData
 }
 
-func parseGeneric(line string) string {
-	return strings.Split(line, "\"")[1]
-}
+// Parses a PGN metadata line and returns the value between quotes.
+func parseGeneric(line string) (string, error) {
+	split := strings.Split(line, "\"")
 
-func parseGenericInt(line string) int {
-	out, err := strconv.Atoi(parseGeneric(line))
-	if err != nil {
-		slog.Error("Error parsing PGN to int", "line", line)
+	if len(split) < 2 {
+		return "", fmt.Errorf("invalid PGN line: %s", line)
 	}
 
-	return out
+	return split[1], nil
+}
+
+// Calls [parseGeneric] and converts to int.
+func parseGenericInt(line string) (int, error) {
+	generic, err := parseGeneric(line)
+	if err != nil {
+		return -1, err
+	}
+
+	out, err := strconv.Atoi(generic)
+	if err != nil {
+		return -1, fmt.Errorf("invalid integer in PGN line: %s", line)
+	}
+
+	return out, nil
 }

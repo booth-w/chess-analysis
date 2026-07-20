@@ -9,27 +9,34 @@ func TestParseElo(t *testing.T) {
 		name     string
 		input    string
 		expected int
+		hasErr   bool
 	}{
 		{
 			name:     "Valid Elo",
 			input:    `[WhiteElo "1500"]`,
 			expected: 1500,
+			hasErr:   false,
 		},
 		{
 			name:     "Unknown Elo",
 			input:    `[WhiteElo "?"]`,
 			expected: -1,
+			hasErr:   false,
 		},
 		{
 			name:     "Invalid Elo",
 			input:    `[WhiteElo "invalid"]`,
 			expected: -1,
+			hasErr:   true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			output := parseElo(tt.input)
+			output, err := parseElo(tt.input)
+			if (err != nil) != tt.hasErr {
+				t.Errorf("Expected error: %v, got: %v", tt.hasErr, err)
+			}
 			if output != tt.expected {
 				t.Errorf("Expected %v, got %v", tt.expected, output)
 			}

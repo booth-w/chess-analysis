@@ -8,23 +8,28 @@ import (
 )
 
 // Converts a PGN elo string to an int. Returns -1 if the elo is unknown ("?").
-func parseElo(line string) int {
-	eloStr := parseGeneric(line)
+func parseElo(line string) (int, error) {
+	eloStr, err := parseGeneric(line)
+	if err != nil {
+		return -1, err
+	}
+
 	if eloStr == "?" {
-		return -1
+		slog.Warn("elo is unknown", "line", line)
+		return -1, nil
 	}
 
 	elo, err := strconv.Atoi(eloStr)
 	if err != nil {
-		slog.Error("Failed to parse elo", "elo", eloStr, "error", err)
-		return -1
+		return -1, fmt.Errorf("failed to parse elo %q: %v", eloStr, err)
 	}
 
-	return elo
+	return elo, nil
 }
 
 // Parses a filter string to a min and optional max elo.
 // Examples:
+//
 //	"1500" -> min=1500, max=9999
 //	"1500-2000" -> min=1500, max=2000
 //	"" -> min=0, max=9999
@@ -33,7 +38,7 @@ func ParseEloFilter(filter string) (int, int, error) {
 		return 0, 9999, nil
 	}
 
-	formatError := fmt.Errorf("Invalid elo filter format %q. Use <min> or <min>-<max>. Example: 1500 or 1500-2000", filter)
+	formatError := fmt.Errorf("invalid elo filter format %q. Use <min> or <min>-<max>. Example: 1500 or 1500-2000", filter)
 
 	parts := strings.Split(filter, "-")
 	if len(parts) == 1 {
