@@ -30,6 +30,12 @@ func TestGetWinner(t *testing.T) {
 			hasErr:   false,
 		},
 		{
+			name:     "Invalid game",
+			input:    `[Result "*"]`,
+			expected: 3,
+			hasErr:   false,
+		},
+		{
 			name:     "Invalid input",
 			input:    `[Result "invalid"]`,
 			expected: -1,

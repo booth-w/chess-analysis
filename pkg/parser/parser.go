@@ -22,51 +22,57 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 		if len(line) != 0 {
 			if line[0] == '[' {
 				metadataKey := strings.Split(line, " ")[0][1:]
+				err := error(nil)
 
 				switch metadataKey {
 				case "Event":
-					newGame.Event, _ = parseGeneric(line)
+					newGame.Event, err = parseGeneric(line)
 				case "Site":
-					newGame.Site, _ = parseGeneric(line)
+					newGame.Site, err = parseGeneric(line)
 				case "Date":
-					newGame.Date, _ = parseGeneric(line)
+					newGame.Date, err = parseGeneric(line)
 				case "Round":
-					newGame.Round, _ = parseGeneric(line)
+					newGame.Round, err = parseGeneric(line)
 				case "White":
-					newGame.White, _ = parseGeneric(line)
+					newGame.White, err = parseGeneric(line)
 				case "Black":
-					newGame.Black, _ = parseGeneric(line)
+					newGame.Black, err = parseGeneric(line)
 				case "Result":
-					newGame.Result, _ = getWinner(line)
+					newGame.Result, err = getWinner(line)
 				case "UTCDate":
-					newGame.UTCDate, _ = parseGeneric(line)
+					newGame.UTCDate, err = parseGeneric(line)
 				case "UTCTime":
-					newGame.UTCTime, _ = parseGeneric(line)
+					newGame.UTCTime, err = parseGeneric(line)
 				case "WhiteElo":
-					newGame.WhiteElo, _ = parseElo(line)
+					newGame.WhiteElo, err = parseElo(line)
 				case "BlackElo":
-					newGame.BlackElo, _ = parseElo(line)
+					newGame.BlackElo, err = parseElo(line)
 				case "WhiteRatingDiff":
-					newGame.WhiteRatingDiff, _ = parseGenericInt(line)
+					newGame.WhiteRatingDiff, err = parseGenericInt(line)
 				case "BlackRatingDiff":
-					newGame.BlackRatingDiff, _ = parseGenericInt(line)
+					newGame.BlackRatingDiff, err = parseGenericInt(line)
 				case "WhiteTitle":
-					newGame.WhiteTitle, _ = parseGeneric(line)
+					newGame.WhiteTitle, err = parseGeneric(line)
 				case "BlackTitle":
-					newGame.BlackTitle, _ = parseGeneric(line)
+					newGame.BlackTitle, err = parseGeneric(line)
 				case "ECO":
-					newGame.ECO, _ = parseGeneric(line)
+					newGame.ECO, err = parseGeneric(line)
 				case "Opening":
-					newGame.Opening, _ = parseGeneric(line)
+					newGame.Opening, err = parseGeneric(line)
 				case "TimeControl":
-					newGame.TimeControl, _ = parseGeneric(line)
+					newGame.TimeControl, err = parseGeneric(line)
 				case "Termination":
-					newGame.Termination, _ = parseGeneric(line)
+					newGame.Termination, err = parseGeneric(line)
 				case "LichessId":
-					newGame.LichessId, _ = parseGeneric(line)
+					newGame.LichessId, err = parseGeneric(line)
 				default:
 					slog.Warn("Unknown metadata key", "metadataKey", metadataKey)
 				}
+
+				if err != nil {
+					slog.Error("Failed to parse metadata", "line", line, "error", err, "game", newGame)
+				}
+
 			} else {
 				newGame.Movetext = append(newGame.Movetext, line)
 			}
@@ -93,8 +99,11 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 		}
 		gamesData.Terminations[newGame.Termination]++
 
-		gamesData.TotalGames++
-		gamesData.Wins[newGame.Result]++
+		if newGame.Result != -1 {
+			gamesData.TotalGames++
+			gamesData.Wins[newGame.Result]++
+		}
+
 		newGame = Game{}
 	}
 

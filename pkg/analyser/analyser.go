@@ -38,7 +38,7 @@ func PrintTotalWinsByColour(gamesData parser.GamesData, options PrintOptions) {
 	slog.Info("Getting total wins per colour", "options", options)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	labels := []string{"White", "Black", "Draw"}
+	labels := []string{"White", "Black", "Draw", "Invalid"}
 
 	// Print table header
 	if options.PrintPercent {

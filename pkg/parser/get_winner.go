@@ -27,6 +27,8 @@ func getWinner(line string) (int, error) {
 		return 0, nil // white
 	} else if line[0] == '0' {
 		return 1, nil // black
+	} else if line[0] == '*' {
+		return 3, nil // invalid
 	} else {
 		return -1, fmt.Errorf("invalid result %q", line)
 	}

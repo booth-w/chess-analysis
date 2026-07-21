@@ -10,7 +10,7 @@ type Game struct {
 	White string
 	Black string
 
-	// 0: white win, 1: black win, 2: draw
+	// 0: white win, 1: black win, 2: draw, 3: invalid
 	Result int
 
 	UTCDate string
@@ -32,7 +32,7 @@ type Game struct {
 
 type GamesData struct {
 	TotalGames int
-	Wins       [3]int
+	Wins       [4]int
 
 	TimeControls map[string]int
 	Terminations map[string]int
