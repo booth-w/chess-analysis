@@ -15,7 +15,7 @@ func parseElo(line string) (int, error) {
 	}
 
 	if eloStr == "?" {
-		slog.Warn("elo is unknown", "line", line)
+		slog.Debug("elo is unknown", "line", line)
 		return -1, nil
 	}
 
