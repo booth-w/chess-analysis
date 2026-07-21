@@ -40,10 +40,20 @@ func PrintTotalWinsByColour(gamesData parser.GamesData, options PrintOptions) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	labels := []string{"White", "Black", "Draw"}
 
-	fmt.Fprintln(w, "Colour\tWins\tPercent")
+	// Print table header
+	if options.PrintPercent {
+		fmt.Fprintln(w, "Colour\tWins\tPercent")
+	} else {
+		fmt.Fprintln(w, "Colour\tWins")
+	}
+
 	for i, wins := range gamesData.Wins {
-		percent := float64(wins) / float64(gamesData.TotalGames) * 100
-		fmt.Fprintf(w, "%s\t%d\t%.2f%%\n", labels[i], wins, percent)
+		if options.PrintPercent {
+			percent := float64(wins) / float64(gamesData.TotalGames) * 100
+			fmt.Fprintf(w, "%s\t%d\t%.2f%%\n", labels[i], wins, percent)
+		} else {
+			fmt.Fprintf(w, "%s\t%d\n", labels[i], wins)
+		}
 	}
 
 	w.Flush()
@@ -69,7 +79,7 @@ func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
 		sorted = append(sorted, kv{k, v})
 	}
 
-	if options.PrintTotal {
+	if options.PrintTotal || options.PrintPercent {
 		totalValue = 0
 		for _, kv := range sorted {
 			totalValue += int64(kv.Value)
@@ -87,8 +97,21 @@ func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
 	})
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+
+	// Print table header
+	if options.PrintPercent {
+		fmt.Fprintln(w, "Key\tValue\tPercent")
+	} else {
+		fmt.Fprintln(w, "Key\tValue")
+	}
+
 	for _, kv := range sorted {
-		fmt.Fprintf(w, "%v\t%v\n", kv.Key, kv.Value)
+		if options.PrintPercent {
+			percent := float64(kv.Value) / float64(totalValue) * 100
+			fmt.Fprintf(w, "%v\t%v\t%.2f%%\n", kv.Key, kv.Value, percent)
+		} else {
+			fmt.Fprintf(w, "%v\t%v\n", kv.Key, kv.Value)
+		}
 	}
 
 	w.Flush()

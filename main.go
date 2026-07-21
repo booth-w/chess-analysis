@@ -63,7 +63,8 @@ func main() {
 	games := parser.ParseStdin(eloMin, eloMax)
 
 	options := analyser.PrintOptions{
-		PrintTotal: true,
+		PrintTotal:   true,
+		PrintPercent: true,
 	}
 	analyser.PrintTotalWinsByColour(games, options)
 	analyser.PrintSortedMap(games.Terminations, options)
