@@ -1,4 +1,6 @@
 bin/
 dataset/
 
+games.gob
+
 cpu.prof
