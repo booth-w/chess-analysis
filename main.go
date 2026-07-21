@@ -35,7 +35,7 @@ func main() {
 
 	logLevel := parseLogLevel(*flagLogLevel)
 
-	if *flagLogLevel != "" && logLevel == slog.LevelInfo {
+	if *flagLogLevel != "info" && logLevel == slog.LevelInfo {
 		slog.Warn("Invalid log level. Defaulting to info", "level", *flagLogLevel)
 	}
 
