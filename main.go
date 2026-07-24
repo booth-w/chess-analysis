@@ -80,7 +80,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	games := parser.ParseStdin(eloMin, eloMax)
+	games, err := parser.ParseStdin(eloMin, eloMax)
+
+	if err != nil {
+		slog.Error("Error parsing stdin", "error", err)
+		os.Exit(1)
+	}
 
 	options := analyser.PrintOptions{
 		PrintTotal:   true,

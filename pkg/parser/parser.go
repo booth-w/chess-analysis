@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func ParseStdin(eloMin int, eloMax int) GamesData {
+func ParseStdin(eloMin int, eloMax int) (GamesData, error) {
 	slog.Info("Reading stdin")
 	s := bufio.NewScanner(os.Stdin)
 
@@ -107,7 +107,11 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 		newGame = Game{}
 	}
 
-	return gamesData
+	if err := s.Err(); err != nil {
+		return gamesData, err
+	}
+
+	return gamesData, nil
 }
 
 // Parses a PGN metadata line and returns the value between quotes.
