@@ -21,7 +21,7 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 
 		if len(line) != 0 {
 			if line[0] == '[' {
-				metadataKey := strings.Split(line, " ")[0][1:]
+				metadataKey := line[1:strings.Index(line, " ")]
 				err := error(nil)
 
 				switch metadataKey {
