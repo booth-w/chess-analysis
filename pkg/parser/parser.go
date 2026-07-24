@@ -112,13 +112,17 @@ func ParseStdin(eloMin int, eloMax int) GamesData {
 
 // Parses a PGN metadata line and returns the value between quotes.
 func parseGeneric(line string) (string, error) {
-	split := strings.Split(line, "\"")
-
-	if len(split) < 2 {
+	start := strings.IndexByte(line, '"')
+	if start == -1 {
 		return "", fmt.Errorf("invalid PGN line: %s", line)
 	}
 
-	return split[1], nil
+	end := strings.IndexByte(line[start+1:], '"')
+	if end == -1 {
+		return "", fmt.Errorf("invalid PGN line: %s", line)
+	}
+
+	return line[start+1 : start+1+end], nil
 }
 
 // Calls [parseGeneric] and converts to int.
