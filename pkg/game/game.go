@@ -24,18 +24,32 @@ type Game struct {
 	BlackTitle      string
 
 	ECO         string
-	Opening     string
+	Opening     Opening
 	TimeControl string
 	Termination string
 	LichessId   string
+}
+
+// Example. "Sicilian Defense: Najdorf Variation, English Attack" is represented as:
+//
+//	{
+//		Family: "Sicilian Defense",
+//		Variation: ["Najdorf Variation", "English Attack"]
+//	}
+type Opening struct {
+	Family    string
+	Variation []string
 }
 
 type GamesData struct {
 	TotalGames int
 	Wins       [4]int
 
-	Events       map[string]int
-	Titles       map[string]int
+	Events            map[string]int
+	Titles            map[string]int
+	Openings          map[string]int
+	OpeningVariations map[string]int
+
 	TimeControls map[string]int
 	Terminations map[string]int
 }

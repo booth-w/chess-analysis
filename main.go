@@ -84,12 +84,30 @@ func main() {
 		PrintTotal:   true,
 		PrintPercent: true,
 	}
+
 	fmt.Println("Win rate:")
 	analyser.PrintTotalWinsByColour(games, options)
+
 	fmt.Println("\nGame Types:")
 	analyser.PrintSortedMap(games.Events, options)
+
 	fmt.Println("\nTitles:")
 	analyser.PrintSortedMap(games.Titles, options)
+
+	fmt.Println("\nOpenings:")
+	analyser.PrintSortedMap(games.Openings, analyser.PrintOptions{
+		PrintTotal:   true,
+		PrintPercent: true,
+		Top:          10,
+	})
+
+	fmt.Println("\nOpening Variations:")
+	analyser.PrintSortedMap(games.OpeningVariations, analyser.PrintOptions{
+		PrintTotal:   true,
+		PrintPercent: true,
+		Top:          10,
+	})
+
 	fmt.Println("\nTerminations:")
 	analyser.PrintSortedMap(games.Terminations, options)
 

@@ -32,6 +32,7 @@ Total: 45037834
 ```
 
 ### Titles
+
 ```
 Titles:
 Key       Value     Percent
@@ -45,6 +46,40 @@ GM        15035     0.02%
 WFM       261       0.00%
 WCM       8         0.00%
 Total: 90075668
+```
+
+### Opening Families
+
+```
+Key                   Value   Percent
+Sicilian Defense      341351  10.09%
+French Defense        231010  6.83%
+Queen's Pawn Game     169924  5.02%
+King's Pawn Game      153550  4.54%
+Scandinavian Defense  146299  4.33%
+Italian Game          107998  3.19%
+Caro-Kann Defense     99266   2.94%
+English Opening       94809   2.80%
+Bishop's Opening      91681   2.71%
+Van't Kruijs Opening  86108   2.55%
+Total: 3381744
+```
+
+### Openings with variations
+
+```
+Key                                            Value  Percent
+Scandinavian Defense: Mieses-Kotroc Variation  64451  3.29%
+French Defense: Knight Variation               52681  2.69%
+Sicilian Defense: Bowdler Attack               50744  2.59%
+Queen's Pawn Game: Chigorin Variation          37438  1.91%
+King's Pawn Game: Wayward Queen Attack         33581  1.71%
+King's Pawn Game: Leonardis Variation          30059  1.53%
+French Defense: Normal Variation               27894  1.42%
+Sicilian Defense: Old Sicilian                 27559  1.41%
+Queen's Pawn Game: Zukertort Variation         26799  1.37%
+Sicilian Defense: McDonnell Attack             22701  1.16%
+Total: 1958472
 ```
 
 ### Game termination

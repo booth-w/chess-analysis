@@ -18,6 +18,13 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 	var gamesData game.GamesData
 	var newGame game.Game
 
+	gamesData.Events = make(map[string]int)
+	gamesData.Titles = make(map[string]int)
+	gamesData.TimeControls = make(map[string]int)
+	gamesData.Terminations = make(map[string]int)
+	gamesData.Openings = make(map[string]int)
+	gamesData.OpeningVariations = make(map[string]int)
+
 	for s.Scan() {
 		line := s.Text()
 
@@ -60,7 +67,7 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 				case "ECO":
 					newGame.ECO, err = parseGeneric(line)
 				case "Opening":
-					newGame.Opening, err = parseGeneric(line)
+					newGame.Opening, err = parseOpening(line)
 				case "TimeControl":
 					newGame.TimeControl, err = parseGeneric(line)
 				case "Termination":
@@ -89,16 +96,9 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 			continue
 		}
 
-		// Event
-		if gamesData.Events == nil {
-			gamesData.Events = make(map[string]int)
-		}
+		// Update gamesData with the new game
 		gamesData.Events[newGame.Event]++
 
-		// Title
-		if gamesData.Titles == nil {
-			gamesData.Titles = make(map[string]int)
-		}
 		if newGame.WhiteTitle != "" {
 			gamesData.Titles[newGame.WhiteTitle]++
 		} else {
@@ -110,16 +110,14 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 			gamesData.Titles["Untitled"]++
 		}
 
-		// Time control
-		if gamesData.TimeControls == nil {
-			gamesData.TimeControls = make(map[string]int)
+		gamesData.Openings[newGame.Opening.Family]++
+		if len(newGame.Opening.Variation) > 0 {
+			openingFull := newGame.Opening.Family + ": " +
+				strings.Join(newGame.Opening.Variation, ", ")
+			gamesData.OpeningVariations[openingFull]++
 		}
-		gamesData.TimeControls[newGame.TimeControl]++
 
-		// Termination
-		if gamesData.Terminations == nil {
-			gamesData.Terminations = make(map[string]int)
-		}
+		gamesData.TimeControls[newGame.TimeControl]++
 		gamesData.Terminations[newGame.Termination]++
 
 		if newGame.Result != -1 {
