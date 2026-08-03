@@ -1,13 +1,13 @@
 package main
 
 import (
-	"encoding/gob"
 	"flag"
 	"log/slog"
 	"os"
 	"runtime/pprof"
 
 	"github.com/booth-w/chess-analysis/pkg/analyser"
+	"github.com/booth-w/chess-analysis/pkg/gob"
 	"github.com/booth-w/chess-analysis/pkg/parser"
 )
 
@@ -28,26 +28,9 @@ func parseLogLevel(level string) slog.Level {
 	}
 }
 
-func saveToGob(games parser.GamesData, filepath string) error {
-	slog.Info("Saving to gob", "filepath", filepath)
-
-	file, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	encoder := gob.NewEncoder(file)
-	err = encoder.Encode(games)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func main() {
 	flagElo := flag.String("elo", "", "Elo rating to filter games by. Usage: <min> or <min>-<max> (inclusive). Example: 1500 or 1500-2000")
+	flagGobIn := flag.String("i", "", "Input path for the gob file")
 	flagGobOut := flag.String("o", "", "Output path for the gob file")
 	flagProfile := flag.Bool("profile", false, "Enable CPU profiling (creates cpu.prof)")
 	flagLogLevel := flag.String("log-level", "", "Set the log level. Usage: debug, info, warn, error")
@@ -80,11 +63,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	games, err := parser.ParseStdin(eloMin, eloMax)
-
-	if err != nil {
-		slog.Error("Error parsing stdin", "error", err)
-		os.Exit(1)
+	var games parser.GamesData
+	if *flagGobIn != "" { // Load from gob file
+		games, err = gob.LoadFromGob(*flagGobIn)
+		if err != nil {
+			slog.Error("Error loading from gob", "error", err)
+			os.Exit(1)
+		}
+	} else { // Parse from stdin
+		games, err = parser.ParseStdin(eloMin, eloMax)
+		if err != nil {
+			slog.Error("Error parsing stdin", "error", err)
+			os.Exit(1)
+		}
 	}
 
 	options := analyser.PrintOptions{
@@ -96,7 +87,7 @@ func main() {
 
 	// Save to gob
 	if *flagGobOut != "" {
-		err = saveToGob(games, *flagGobOut)
+		err = gob.SaveToGob(games, *flagGobOut)
 		if err != nil {
 			slog.Error("Error saving to gob", "error", err)
 			os.Exit(1)
