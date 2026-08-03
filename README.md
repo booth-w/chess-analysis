@@ -26,3 +26,19 @@ Rules infraction  2427      0.01%
 Unterminated      65        0.00%
 Total: 45037834
 ```
+
+### Game types
+
+```
+Key                         Value     Percent
+Rated Blitz game            15385204  34.16%
+Rated Classical game        11306052  25.10%
+Rated Bullet game           10928701  24.27%
+Rated Bullet tournament     3477032   7.72%
+Rated Blitz tournament      3021226   6.71%
+Rated Standard game         464972    1.03%
+Rated Classical tournament  287658    0.64%
+Rated Correspondence game   155308    0.34%
+Rated Standard tournament   11681     0.03%
+Total: 45037834
+```

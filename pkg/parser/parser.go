@@ -28,7 +28,7 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 
 				switch metadataKey {
 				case "Event":
-					newGame.Event, err = parseGeneric(line)
+					newGame.Event, err = ParseEvent(line)
 				case "Site":
 					newGame.Site, err = parseGeneric(line)
 				case "Date":
@@ -88,6 +88,12 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 			newGame = game.Game{}
 			continue
 		}
+
+		// Event
+		if gamesData.Events == nil {
+			gamesData.Events = make(map[string]int)
+		}
+		gamesData.Events[newGame.Event]++
 
 		// Time control
 		if gamesData.TimeControls == nil {

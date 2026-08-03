@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log/slog"
 	"os"
 	"runtime/pprof"
@@ -83,8 +84,12 @@ func main() {
 		PrintTotal:   true,
 		PrintPercent: true,
 	}
+	fmt.Println("Win rate:")
 	analyser.PrintTotalWinsByColour(games, options)
+	fmt.Println("\nTerminations:")
 	analyser.PrintSortedMap(games.Terminations, options)
+	fmt.Println("\nGame Types:")
+	analyser.PrintSortedMap(games.Events, options)
 
 	// Save to gob
 	if *flagGobOut != "" {
