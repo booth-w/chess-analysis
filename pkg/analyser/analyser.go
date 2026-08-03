@@ -106,7 +106,15 @@ func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
 	}
 
 	// If Top is set, only print the top N values
+	var otherValue V
+	hasOther := false
 	if options.Top > 0 && options.Top < len(sorted) {
+		if options.Other {
+			for _, kv := range sorted[options.Top:] {
+				otherValue += kv.Value
+				hasOther = true
+			}
+		}
 		sorted = sorted[:options.Top]
 	}
 
@@ -117,6 +125,16 @@ func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
 			fmt.Fprintf(w, "%v\t%v\t%.2f%%\n", kv.Key, kv.Value, percent)
 		} else {
 			fmt.Fprintf(w, "%v\t%v\n", kv.Key, kv.Value)
+		}
+	}
+
+	// Print "Other" for values cut off by Top
+	if options.Other && hasOther {
+		if options.PrintPercent {
+			percent := float64(otherValue) / float64(totalValue) * 100
+			fmt.Fprintf(w, "Other\t%v\t%.2f%%\n", otherValue, percent)
+		} else {
+			fmt.Fprintf(w, "Other\t%v\n", otherValue)
 		}
 	}
 

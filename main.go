@@ -88,6 +88,7 @@ func main() {
 		PrintTotal:   true,
 		PrintPercent: true,
 		Top:          10,
+		Other:        true,
 	}
 
 	fmt.Println("Win rate:")
