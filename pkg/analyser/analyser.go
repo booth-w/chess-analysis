@@ -105,6 +105,12 @@ func PrintSortedMap[K cmp.Ordered, V Number](m map[K]V, options PrintOptions) {
 		fmt.Fprintln(w, "Key\tValue")
 	}
 
+	// If Top is set, only print the top N values
+	if options.Top > 0 && options.Top < len(sorted) {
+		sorted = sorted[:options.Top]
+	}
+
+	// Print the sorted map
 	for _, kv := range sorted {
 		if options.PrintPercent {
 			percent := float64(kv.Value) / float64(totalValue) * 100
