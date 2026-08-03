@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"strconv"
 	"strings"
+
+	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
 // Converts a PGN elo string to an int. Returns -1 if the elo is unknown ("?").
@@ -64,7 +66,7 @@ func ParseEloFilter(filter string) (int, int, error) {
 }
 
 // Returns true if both players of a provided game are within the given elo range (inclusive).
-func FilterElo(game Game, min int, max int) bool {
+func FilterElo(game game.Game, min int, max int) bool {
 	return game.WhiteElo >= min && game.WhiteElo <= max &&
 		game.BlackElo >= min && game.BlackElo <= max
 }

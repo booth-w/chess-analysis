@@ -7,14 +7,16 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
-func ParseStdin(eloMin int, eloMax int) (GamesData, error) {
+func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 	slog.Info("Reading stdin")
 	s := bufio.NewScanner(os.Stdin)
 
-	var gamesData GamesData
-	var newGame Game
+	var gamesData game.GamesData
+	var newGame game.Game
 
 	for s.Scan() {
 		line := s.Text()
@@ -83,7 +85,7 @@ func ParseStdin(eloMin int, eloMax int) (GamesData, error) {
 
 		// Filter by elo
 		if !FilterElo(newGame, eloMin, eloMax) {
-			newGame = Game{}
+			newGame = game.Game{}
 			continue
 		}
 
@@ -104,7 +106,7 @@ func ParseStdin(eloMin int, eloMax int) (GamesData, error) {
 			gamesData.Wins[newGame.Result]++
 		}
 
-		newGame = Game{}
+		newGame = game.Game{}
 	}
 
 	if err := s.Err(); err != nil {

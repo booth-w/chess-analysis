@@ -1,4 +1,4 @@
-package parser
+package game
 
 type Game struct {
 	Movetext []string

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/booth-w/chess-analysis/pkg/parser"
+	"github.com/booth-w/chess-analysis/pkg/game"
 )
 
 type PrintOptions struct {
@@ -34,7 +34,7 @@ type Number interface {
 		~float32 | ~float64
 }
 
-func PrintTotalWinsByColour(gamesData parser.GamesData, options PrintOptions) {
+func PrintTotalWinsByColour(gamesData game.GamesData, options PrintOptions) {
 	slog.Info("Getting total wins per colour", "options", options)
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)

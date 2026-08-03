@@ -7,6 +7,7 @@ import (
 	"runtime/pprof"
 
 	"github.com/booth-w/chess-analysis/pkg/analyser"
+	"github.com/booth-w/chess-analysis/pkg/game"
 	"github.com/booth-w/chess-analysis/pkg/gob"
 	"github.com/booth-w/chess-analysis/pkg/parser"
 )
@@ -63,7 +64,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var games parser.GamesData
+	var games game.GamesData
 	if *flagGobIn != "" { // Load from gob file
 		games, err = gob.LoadFromGob(*flagGobIn)
 		if err != nil {
