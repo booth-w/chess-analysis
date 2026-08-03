@@ -6,7 +6,7 @@ import (
 
 // Removes the lichess event link
 // Example: [Event "Rated Bullet tournament https://lichess.org/tournament/yc1WW2Ox"] -> Rated Bullet tournament
-func ParseEvent(line string) (string, error) {
+func parseEvent(line string) (string, error) {
 	line, err := parseGeneric(line)
 	if err != nil {
 		return "", err

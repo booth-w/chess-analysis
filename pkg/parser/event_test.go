@@ -26,7 +26,7 @@ func TestParseEvent(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			output, err := ParseEvent(tt.line)
+			output, err := parseEvent(tt.line)
 			if (err != nil) != tt.hasErr {
 				t.Errorf("Expected error: %v, got: %v", tt.hasErr, err)
 			}
