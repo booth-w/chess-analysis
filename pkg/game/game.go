@@ -34,8 +34,8 @@ type GamesData struct {
 	TotalGames int
 	Wins       [4]int
 
-	Events map[string]int
-
+	Events       map[string]int
+	Titles       map[string]int
 	TimeControls map[string]int
 	Terminations map[string]int
 }

@@ -86,10 +86,12 @@ func main() {
 	}
 	fmt.Println("Win rate:")
 	analyser.PrintTotalWinsByColour(games, options)
-	fmt.Println("\nTerminations:")
-	analyser.PrintSortedMap(games.Terminations, options)
 	fmt.Println("\nGame Types:")
 	analyser.PrintSortedMap(games.Events, options)
+	fmt.Println("\nTitles:")
+	analyser.PrintSortedMap(games.Titles, options)
+	fmt.Println("\nTerminations:")
+	analyser.PrintSortedMap(games.Terminations, options)
 
 	// Save to gob
 	if *flagGobOut != "" {

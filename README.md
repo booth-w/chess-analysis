@@ -15,18 +15,6 @@ Invalid  69        0.00%
 Total: 45037834
 ```
 
-### Game termination
-
-```
-Key               Value     Percent
-Normal            29714108  65.98%
-Time forfeit      15078805  33.48%
-Abandoned         242429    0.54%
-Rules infraction  2427      0.01%
-Unterminated      65        0.00%
-Total: 45037834
-```
-
 ### Game types
 
 ```
@@ -42,3 +30,32 @@ Rated Correspondence game   155308    0.34%
 Rated Standard tournament   11681     0.03%
 Total: 45037834
 ```
+
+### Titles
+```
+Titles:
+Key       Value     Percent
+Untitled  89660540  99.54%
+LM        154272    0.17%
+NM        85319     0.09%
+FM        63418     0.07%
+IM        56434     0.06%
+CM        40381     0.04%
+GM        15035     0.02%
+WFM       261       0.00%
+WCM       8         0.00%
+Total: 90075668
+```
+
+### Game termination
+
+```
+Key               Value     Percent
+Normal            29714108  65.98%
+Time forfeit      15078805  33.48%
+Abandoned         242429    0.54%
+Rules infraction  2427      0.01%
+Unterminated      65        0.00%
+Total: 45037834
+```
+

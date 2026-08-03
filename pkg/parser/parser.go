@@ -95,6 +95,21 @@ func ParseStdin(eloMin int, eloMax int) (game.GamesData, error) {
 		}
 		gamesData.Events[newGame.Event]++
 
+		// Title
+		if gamesData.Titles == nil {
+			gamesData.Titles = make(map[string]int)
+		}
+		if newGame.WhiteTitle != "" {
+			gamesData.Titles[newGame.WhiteTitle]++
+		} else {
+			gamesData.Titles["Untitled"]++
+		}
+		if newGame.BlackTitle != "" {
+			gamesData.Titles[newGame.BlackTitle]++
+		} else {
+			gamesData.Titles["Untitled"]++
+		}
+
 		// Time control
 		if gamesData.TimeControls == nil {
 			gamesData.TimeControls = make(map[string]int)
